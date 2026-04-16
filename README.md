@@ -4,14 +4,6 @@ A honeypot dashboard that **writes its own UI**. Instead of a fixed layout with 
 
 WordPress brute force day? You get a WordPress-focused dashboard. Cloud metadata SSRF probes? The UI reshapes to surface that. The dashboard follows the attacks.
 
-![Dashboard on April 15 — dominant IP hero mode with attack signature breakdown](screenshot_apr15.png)
-
-![Dashboard on March 27 — remote code execution attempts highlighted](screenshot_mar27.png)
-
-![Dashboard on March 22 — broader attack mix, different layout](screenshot_mar22.png)
-
-> Each screenshot is from a **different day of logs** — same codebase, same server, completely different dashboards generated automatically.
-
 ## How It Works
 
 1. **Ingest** -- reads DShield webhoneypot JSONL log files
@@ -119,7 +111,7 @@ Logs are expected at `/srv/log/webhoneypot_YYYY-MM-DD.json` (configurable in `in
 
 ## Subscribe
 
-If you found this project interesting, check out the video walkthrough and subscribe:
+If you found this project interesting, check out my youtube channel and subscribe:
 
 **[youtube.com/@gnarcoding](https://youtube.com/@gnarcoding)**
 
