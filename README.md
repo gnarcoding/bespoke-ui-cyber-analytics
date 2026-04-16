@@ -117,4 +117,26 @@ If you found this project interesting, check out my youtube channel and subscrib
 
 ## License
 
-ISC
+Copyright (c) 2026 Eric Roldan (eric@gnarcoding.com)
+
+All rights reserved.
+
+Permission is hereby granted to use and modify this software for personal,
+educational, and non-commercial purposes only, subject to the following
+conditions:
+
+1. ATTRIBUTION REQUIRED. Any use, distribution, or display of this software
+   or derivative works must include clear and visible credit to the original
+   author (Eric Roldan).
+
+2. NO COMMERCIAL USE. This software may not be used, in whole or in part,
+   for commercial purposes. You may not sell, license, sublicense, or
+   otherwise profit from this software or any derivative works.
+
+3. NO WARRANTY. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+   KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING
+   FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE.
