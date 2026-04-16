@@ -1,4 +1,4 @@
-var __ignore = (() => {
+var __ignore3 = (() => {
   // web/fallback.jsx
   var { createElement: h, Fragment } = React;
   var { StatCard, BarChart, LineChart, Table, TagChips, SparkBar, COLORS } = window.__components;

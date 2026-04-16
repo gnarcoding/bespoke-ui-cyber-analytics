@@ -16,7 +16,29 @@
       "Bash(curl -s http://127.0.0.1:8000/)",
       "Bash(playwright install *)",
       "Bash(pip show *)",
-      "Bash(C:/Python311/Scripts/pip.exe install *)"
+      "Bash(C:/Python311/Scripts/pip.exe install *)",
+      "Bash(ls C:/Users/errol/isc-sans/blogpostdraft/webhoneypot_*.json)",
+      "Bash(ls C:/Users/errol/isc-sans/blogpostdraft/web/*.js)",
+      "Bash(npx --version)",
+      "Bash(node -e ' *)",
+      "Bash(curl -s -o /dev/null -w \"status=%{http_code} content_type=%{content_type} size=%{size_download}\" \"http://localhost:8000/api/ui?date=2026-04-15\")",
+      "Bash(curl *)",
+      "Bash(wmic process *)",
+      "Bash(tasklist /FI \"IMAGENAME eq python*\")",
+      "Bash(netstat -ano)",
+      "Bash(tasklist /FI \"PID eq 27772\" /V /FO LIST)",
+      "Bash(ls -la __pycache__/server*.pyc)",
+      "Bash(ls C:/Users/errol/isc-sans/blogpostdraft/package*.json C:/Users/errol/isc-sans/blogpostdraft/node_modules/.package-lock.json)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(curl -s http://localhost:8000/api/ui?date=2026-04-15)",
+      "Bash(node validate_runtime.js /tmp/test_bundle.js)",
+      "Bash(node validate_runtime.js /tmp/test_bundle.js /tmp/test_summary.json)",
+      "Bash(taskkill *)",
+      "Bash(curl -s http://localhost:8000/api/ui?date=2026-03-22)",
+      "Bash(curl -s http://localhost:8000/api/summary?date=2026-03-22)",
+      "Bash(node validate_runtime.js /tmp/apr15.js /tmp/apr15_summary.json)",
+      "Bash(node validate_runtime.js /tmp/mar22.js /tmp/mar22_summary.json)"
     ]
   }
 }

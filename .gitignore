@@ -1,8 +1,52 @@
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual environment
 venv/
+.venv/
+
+# Environment / secrets
 .env
+.env.*
+
+# SQLite cache
 cache.db
+cache.db-journal
+cache.db-wal
+
+# Node
 node_modules/
-screenshot_*.png
+
+# Log data (large, fetched from honeypot)
 webhoneypot_*.json
+
+# Screenshots
+screenshot_*.png
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# esbuild output
+*.bundle.js

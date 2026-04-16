@@ -13,6 +13,74 @@ var __ignore2 = (() => {
     "#6366f1",
     "#14b8a6"
   ];
+  function _normItem(item) {
+    if (!item || typeof item !== "object") return { label: String(item ?? ""), value: 0 };
+    let label = item.label;
+    let value = item.value;
+    if (label === void 0) {
+      for (const k of [
+        "name",
+        "ip",
+        "url",
+        "tag",
+        "cluster",
+        "method",
+        "bucket",
+        "port",
+        "useragent",
+        "sig_id",
+        "key",
+        "category"
+      ]) {
+        if (item[k] !== void 0) {
+          label = item[k];
+          break;
+        }
+      }
+    }
+    if (value === void 0) {
+      for (const k of ["count", "hits", "total", "pct"]) {
+        if (item[k] !== void 0) {
+          value = item[k];
+          break;
+        }
+      }
+    }
+    return { ...item, label: label ?? "", value: typeof value === "number" ? value : 0 };
+  }
+  function _normData(data) {
+    if (!Array.isArray(data)) return [];
+    return data.map(_normItem);
+  }
+  function _normTags(tags) {
+    if (!tags) return [];
+    if (Array.isArray(tags)) return tags.map(_normItem);
+    if (typeof tags === "object") {
+      return Object.entries(tags).map(([label, value]) => ({
+        label,
+        value: typeof value === "number" ? value : 0
+      }));
+    }
+    return [];
+  }
+  function _normTable(columns, rows) {
+    if (!Array.isArray(columns) || columns.length === 0) return { columns: [], rows: [] };
+    if (typeof columns[0] === "string") {
+      const normCols = columns.map((c) => ({ key: c, label: c }));
+      const normRows = (rows || []).map((r) => {
+        if (Array.isArray(r)) {
+          const obj = {};
+          normCols.forEach((c, i) => {
+            obj[c.key] = r[i];
+          });
+          return obj;
+        }
+        return r;
+      });
+      return { columns: normCols, rows: normRows };
+    }
+    return { columns, rows: rows || [] };
+  }
   function StatCard({ label, value, subtitle, color = "#3b82f6" }) {
     return h(
       "div",
@@ -23,7 +91,7 @@ var __ignore2 = (() => {
     );
   }
   function BarChart({ title, data, color = "#3b82f6", maxBars = 10 }) {
-    const items = data.slice(0, maxBars);
+    const items = _normData(data).slice(0, maxBars);
     const max = Math.max(...items.map((d) => d.value), 1);
     return h(
       "div",
@@ -51,7 +119,8 @@ var __ignore2 = (() => {
       )
     );
   }
-  function LineChart({ title, data, color = "#3b82f6", height = 200 }) {
+  function LineChart({ title, data: rawData, color = "#3b82f6", height = 200 }) {
+    const data = _normData(rawData);
     if (!data || data.length === 0) return null;
     const W = 700, H = height, pad = { t: 10, r: 10, b: 40, l: 50 };
     const plotW = W - pad.l - pad.r;
@@ -125,7 +194,8 @@ var __ignore2 = (() => {
       )
     );
   }
-  function Table({ title, columns, rows, maxRows = 10 }) {
+  function Table({ title, columns: rawCols, rows: rawRows, maxRows = 10 }) {
+    const { columns, rows } = _normTable(rawCols, rawRows);
     const items = rows.slice(0, maxRows);
     return h(
       "div",
@@ -154,7 +224,7 @@ var __ignore2 = (() => {
     );
   }
   function TagChips({ tags, title, limit = 12 }) {
-    const items = tags.slice(0, limit);
+    const items = _normTags(tags).slice(0, limit);
     function fmt(n) {
       if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
       if (n >= 1e3) return (n / 1e3).toFixed(1) + "k";
@@ -186,7 +256,7 @@ var __ignore2 = (() => {
     );
   }
   function SparkBar({ data, color = "#3b82f6", max = 6 }) {
-    const items = data.slice(0, max);
+    const items = _normData(data).slice(0, max);
     const peak = Math.max(...items.map((d) => d.value), 1);
     return h(
       "div",

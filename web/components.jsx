@@ -21,6 +21,82 @@ const COLORS = [
 ];
 
 // ---------------------------------------------------------------------------
+// Shape normalizers — accept what the LLM gives, not just the canonical shape
+// ---------------------------------------------------------------------------
+
+/**
+ * Normalize a data item to {label, value}.
+ * Accepts: {label, value}, {name, count}, {ip, count}, {tag, count},
+ *          {url, count}, {bucket, count}, {cluster, count}, {method, count},
+ *          {port, count}, {useragent, count}, {sig_id, count}, etc.
+ */
+function _normItem(item) {
+  if (!item || typeof item !== "object") return { label: String(item ?? ""), value: 0 };
+  let label = item.label;
+  let value = item.value;
+  if (label === undefined) {
+    for (const k of ["name", "ip", "url", "tag", "cluster", "method", "bucket",
+                      "port", "useragent", "sig_id", "key", "category"]) {
+      if (item[k] !== undefined) { label = item[k]; break; }
+    }
+  }
+  if (value === undefined) {
+    for (const k of ["count", "hits", "total", "pct"]) {
+      if (item[k] !== undefined) { value = item[k]; break; }
+    }
+  }
+  return { ...item, label: label ?? "", value: typeof value === "number" ? value : 0 };
+}
+
+function _normData(data) {
+  if (!Array.isArray(data)) return [];
+  return data.map(_normItem);
+}
+
+/**
+ * Normalize tags for TagChips.
+ * Accepts:
+ *  - [{label, value}]           (canonical)
+ *  - [{tag, count}] etc.        (endpoint shape)
+ *  - {tag1: count1, tag2: count2}  (object shape from prompt)
+ */
+function _normTags(tags) {
+  if (!tags) return [];
+  if (Array.isArray(tags)) return tags.map(_normItem);
+  if (typeof tags === "object") {
+    return Object.entries(tags).map(([label, value]) => ({
+      label,
+      value: typeof value === "number" ? value : 0,
+    }));
+  }
+  return [];
+}
+
+/**
+ * Normalize Table columns and rows.
+ * Accepts:
+ *  - columns: [{key, label}], rows: [{key: val}]    (component shape)
+ *  - columns: ["col1","col2"], rows: [["a","b"]]     (prompt shape)
+ *  - columns: ["col1","col2"], rows: [{col1: val}]   (mixed)
+ */
+function _normTable(columns, rows) {
+  if (!Array.isArray(columns) || columns.length === 0) return { columns: [], rows: [] };
+  if (typeof columns[0] === "string") {
+    const normCols = columns.map(c => ({ key: c, label: c }));
+    const normRows = (rows || []).map(r => {
+      if (Array.isArray(r)) {
+        const obj = {};
+        normCols.forEach((c, i) => { obj[c.key] = r[i]; });
+        return obj;
+      }
+      return r;
+    });
+    return { columns: normCols, rows: normRows };
+  }
+  return { columns, rows: rows || [] };
+}
+
+// ---------------------------------------------------------------------------
 // StatCard
 // ---------------------------------------------------------------------------
 
@@ -55,7 +131,7 @@ function StatCard({ label, value, subtitle, color = "#3b82f6" }) {
  *   maxBars (number?)         — max bars to show, default 10
  */
 function BarChart({ title, data, color = "#3b82f6", maxBars = 10 }) {
-  const items = data.slice(0, maxBars);
+  const items = _normData(data).slice(0, maxBars);
   const max = Math.max(...items.map(d => d.value), 1);
   return h("div", { className: "chart-container" },
     h("h3", { className: "chart-title" }, title),
@@ -89,7 +165,8 @@ function BarChart({ title, data, color = "#3b82f6", maxBars = 10 }) {
  *   color  (string?)          — line/fill color, default "#3b82f6"
  *   height (number?)          — chart height in px, default 200
  */
-function LineChart({ title, data, color = "#3b82f6", height = 200 }) {
+function LineChart({ title, data: rawData, color = "#3b82f6", height = 200 }) {
+  const data = _normData(rawData);
   if (!data || data.length === 0) return null;
   const W = 700, H = height, pad = { t: 10, r: 10, b: 40, l: 50 };
   const plotW = W - pad.l - pad.r;
@@ -160,7 +237,8 @@ function LineChart({ title, data, color = "#3b82f6", height = 200 }) {
  *   rows     (Array<Object>)    — row data, keyed by column keys
  *   maxRows  (number?)          — max rows to show, default 10
  */
-function Table({ title, columns, rows, maxRows = 10 }) {
+function Table({ title, columns: rawCols, rows: rawRows, maxRows = 10 }) {
+  const { columns, rows } = _normTable(rawCols, rawRows);
   const items = rows.slice(0, maxRows);
   return h("div", { className: "chart-container" },
     h("h3", { className: "chart-title" }, title),
@@ -196,7 +274,7 @@ function Table({ title, columns, rows, maxRows = 10 }) {
  *   limit   (number?)  — max chips to show, default 12
  */
 function TagChips({ tags, title, limit = 12 }) {
-  const items = tags.slice(0, limit);
+  const items = _normTags(tags).slice(0, limit);
 
   function fmt(n) {
     if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
@@ -233,7 +311,7 @@ function TagChips({ tags, title, limit = 12 }) {
  *   max    (number?)  — max items, default 6
  */
 function SparkBar({ data, color = "#3b82f6", max = 6 }) {
-  const items = data.slice(0, max);
+  const items = _normData(data).slice(0, max);
   const peak = Math.max(...items.map(d => d.value), 1);
   return h("div", { className: "spark-bar" },
     items.map((d, i) =>
