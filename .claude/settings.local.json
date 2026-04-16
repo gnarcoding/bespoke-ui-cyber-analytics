@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(pip install *)",
+      "Bash(npx esbuild *)",
+      "Bash(curl -s http://localhost:8000/api/dates)",
+      "Bash(curl -s http://localhost:8000/api/summary?date=2026-04-15)",
+      "Bash(curl -s http://localhost:8000/)",
+      "Bash(curl -s http://localhost:8000/web/components.js)",
+      "Bash(curl -s http://localhost:8000/web/fallback.js)",
+      "Bash(python3 -c \" import json with open\\('/c/Users/errol/isc-sans/blogpostdraft/webhoneypot_2026-04-15.json'\\) as f: for i, line in enumerate\\(f\\): if i < 2: data = json.loads\\(line\\) print\\('Sample entry keys:', list\\(data.keys\\(\\)\\)\\) print\\('Entry 0 data:', json.dumps\\(data, indent=2\\)\\) else: break \")",
+      "Bash(where esbuild *)",
+      "Bash(curl -s http://127.0.0.1:8000/api/dates)",
+      "Bash(disown)",
+      "Bash(curl -s http://127.0.0.1:8000/)",
+      "Bash(playwright install *)",
+      "Bash(pip show *)",
+      "Bash(C:/Python311/Scripts/pip.exe install *)"
+    ]
+  }
+}
